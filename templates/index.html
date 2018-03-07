@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>5 Grandes</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="/static/css/bootstrap.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="/static/css/app.css" rel="stylesheet">
+
+</head>
+
+<body>
+    <script>
+        // This is called with the results from from FB.getLoginStatus().
+        function statusChangeCallback(response) {
+            console.log('statusChangeCallback');
+            console.log(response);
+            // The response object is returned with a status field that lets the
+            // app know the current login status of the person.
+            // Full docs on the response object can be found in the documentation
+            // for FB.getLoginStatus().
+            if (response.status === 'connected') {
+                // Logged into your app and Facebook.
+                testAPI();
+                getFBData();
+            } else {
+                // The person is not logged into your app or we are unable to tell.
+                document.getElementById('status').innerHTML = 'Please log ' +
+                    'into this app.';
+            }
+        }
+        // This function is called when someone finishes with the Login
+        // Button.  See the onlogin handler attached to it in the sample
+        // code below.
+        function checkLoginState() {
+            FB.getLoginStatus(function (response) {
+                location.href = '/fb_success/?access_token=' + response.authResponse.accessToken;
+                statusChangeCallback(response);
+            });
+        }
+        window.fbAsyncInit = function () {
+            FB.init({
+                appId: '370503829817957',
+                cookie: true, // enable cookies to allow the server to access 
+                // the session
+                xfbml: true, // parse social plugins on this page
+                version: 'v2.11' // use graph api version 2.8
+            });
+            // Now that we've initialized the JavaScript SDK, we call 
+            // FB.getLoginStatus().  This function gets the state of the
+            // person visiting this page and can return one of three states to
+            // the callback you provide.  They can be:
+            //
+            // 1. Logged into your app ('connected')
+            // 2. Logged into Facebook, but not your app ('not_authorized')
+            // 3. Not logged into Facebook and can't tell if they are logged into
+            //    your app or not.
+            //
+            // These three cases are handled in the callback function.
+            FB.getLoginStatus(function (response) {
+                statusChangeCallback(response);
+            });
+        };
+        // Load the SDK asynchronously
+        (function (d, s, id) {
+            var js, fjs = d.getElementsByTagName(s)[0];
+            if (d.getElementById(id)) return;
+            js = d.createElement(s);
+            js.id = id;
+            js.src = "https://connect.facebook.net/en_US/sdk.js";
+            fjs.parentNode.insertBefore(js, fjs);
+        }(document, 'script', 'facebook-jssdk'));
+        // Here we run a very simple test of the Graph API after login is
+        // successful.  See statusChangeCallback() for when this call is made.
+        function testAPI() {
+            console.log('Welcome!  Fetching your information.... ');
+            FB.api('/me', function (response) {
+                console.log('Successful login for: ' + response.name);
+                document.getElementById('status').innerHTML =
+                    'Thanks for logging in, ' + response.name + '!' + ' Facebook ID: ' + response.id;
+            });
+        };
+
+        function getFBData() {
+            FB.api('/me?fields=posts.limit(200){message}', function (data) {
+                ///me/posts.limit(200){message}
+                //alert(data.name);
+                console.log(data);
+            })
+        };
+
+        function logout() {
+            FB.logout(function (response) {
+                // user is now logged out
+            });
+        }
+    </script>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="#">5Grandes</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive"
+                aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarResponsive">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="#">Home
+                            <span class="sr-only">(current)</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#Policy">Política de Privacidad</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Header with Background Image -->
+    <header class="business-header">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <!--<h1 class="display-3 text-center text-white mt-4">5Grandes</h1>-->
+
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Page Content -->
+    <div class="container">
+
+        <div class="row">
+            <div class="col-sm-8">
+                <h2 class="mt-4">¿Qué hacemos?</h2>
+                <p> Esta aplicación esta dedicada al análisis de la personalidad a través de las publicaciones de los usuarios
+                    en Facebook. Todo esto con el fin de determinar si el usuario reune los requisitos para una posición
+                    dentro de una organización. Los reclutadores de personal interesados definen el tipo de personalidad
+                    que necesitan para un puesto, y los candidatos, después de ingresar con sus credenciales de Facebook
+                    participan en un ranking a partir del cual seran elegidos o descartados para participar en los siguientes
+                    ejercicios del proceso de reclutamiento. </p>
+                <p>
+                    <h2 class="mt-4">¡Participa ahora!</h2>
+                    <p> Participar en este proceso es fácil, como candidato solo es necesario que estés de acuerdo en darnos
+                        acceso a tus perfil en Facebook. Si estas de acuerdo lo único que debes de hacer es ingresar con
+                        tu cuenta de Facebook con el botón siguiente: </p>
+                    <p>
+                        <fb:login-button autologoutlink="true" scope="public_profile,email,user_posts,user_about_me,user_education_history" onlogin="checkLoginState();">
+                        </fb:login-button>
+                        <div id="status">
+                        </div>
+                    </p>
+            </div>
+            <div class="col-sm-4">
+                <h2 class="mt-4">Contacto</h2>
+                <address>
+                    <strong>Adriana Mansilla Hermosillo</strong>
+                    <br>México, Querétaro
+                    <br>Sabinos 161-A, Jurica
+                    <br>
+                </address>
+                <address>
+                    <abbr title="Phone">Tel:</abbr>
+                    +52 (442) 446-9457
+                    <br>
+                    <abbr title="Email">Mail:</abbr>
+                    <a href="mailto:#">adris_mh89@hotmail.com</a>
+                </address>
+            </div>
+        </div>
+        <!-- /.row -->
+
+        <div class="row">
+            <div class="col-sm-4 my-4">
+                <div class="card">
+                    <img class="card-img-top" src="/static/images/UAQ.jpg" alt="">
+                    <div class="card-body">
+                        <h4 class="card-title">¿Quiénes Somos?</h4>
+                        <p class="card-text" align="justify">Esta página esta en desarrollo como parte de una investigación a cargo de Adriana Mansilla Hermosillo
+                            para obtener el grado de Maestra en Ciencias de la Computación por parte de la Facultad de Informática
+                            de la Universidad Autónoma de Querétaro en México. Su propósito es académico y los resultados
+                            de esta investigación serán publicados como parte de su tesis en Agosto de 2018. Todo esto sin
+                            dañar la integridad y anonimato de los usuarios participantes en la investigación.</p>
+                    </div>
+                    <div class="card-footer">
+                        <a href="http://www.uaq.mx/informatica/mcc.html" class="btn btn-primary">Descubre más!</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-4 my-4">
+                <div class="card">
+                    <img class="card-img-top" src="/static/images/LIWC2.jpg" alt="">
+                    <div class="card-body">
+                        <h4 class="card-title">¿Qué hay detrás de esta aplicación?</h4>
+                        <p class="card-text" align="justify">La manera en que las personas utilizan las palabras en su vida diaria provee información acerca de
+                            sus creencias, sus miedos, su manera de pensar, sus relaciones sociales, y personalidad. Desde
+                            los tiempos de Sigmund Freud hasta el análisis de texto computarizado de hoy en día, los investigadores
+                            han encontrado grandes cantidades de evidencia que apunta a que las palabras que utilizamos tienen
+                            un gran valor psicológico. En 1993 James W. Pennebaker y Martha E. Francis desarrollaron una
+                            aplicación llamada Linguistic Inquiry and Word Count (LIWC, por sus siglas en inglés) que incluye
+                            una compilación de clasificación de palabras que forman diccionarios de dominios particulares
+                            (e.g., palabras negativas). En esta investigación estos diccionarios se emplean como dataset.</p>
+                    </div>
+                    <div class="card-footer">
+                        <a href="http://liwc.wpengine.com/wp-content/uploads/2015/11/LIWC2015_LanguageManual.pdf" class="btn btn-primary">Descubre más!</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-4 my-4">
+                <div class="card">
+                    <img class="card-img-top" src="/static/images/big5.jpg" alt="">
+                    <div class="card-body">
+                        <h4 class="card-title">Los 5 Grandes</h4>
+                        <p class="card-text" align="justify">En inglés este modelo es conocido como The Big Five, y fue creado en la decada de los 70 cuando dos
+                            equipos de investigación conformados por Paul Costa y Robert R. McCrae del Instituto Nacional
+                            de la Salud junto a Warren Norman y Lewis Goldberg de la Universidad de Michigan en Ann Arbor
+                            y la Universidad de Oregon, respectivamente, descubrieron que la mayoría de las carácteristicas
+                            humanas se podían dividir en 5 dimensiones:
+                            <ul>
+                                <li>Extroversión</li>
+                                <li>Apertura a nuevas experiencias</li>
+                                <li>Amabilidad</li>
+                                <li>Responsabilidad</li>
+                                <li>Neurotismo</li>
+                            </ul>
+                            En el marco de esta investigación se busca averiguar la personalidad de los usuarios de acuerdo con este modelo para asi
+                            clasificarlos de acuerdo a las necesidades del empleador.
+                        </p>
+                    </div>
+                    <div class="card-footer">
+                        <a href="https://es.wikipedia.org/wiki/Modelo_de_los_cinco_grandes" class="btn btn-primary">Descubre más!</a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <!-- /.row -->
+        <div id="Policy">
+            <p>
+                <strong>POLÍTICA DE PRIVACIDAD</strong>
+            </p>
+            <p align="justify">La presente Política de Privacidad establece los términos en que 5Grandes usa y protege la información que es
+                proporcionada por sus usuarios al momento de utilizar su sitio web. Esta compañía está comprometida con la
+                seguridad de los datos de sus usuarios. Cuando le pedimos llenar los campos de información personal con la
+                cual usted pueda ser identificado, lo hacemos asegurando que sólo se empleará de acuerdo con los términos
+                de este documento. Sin embargo esta Política de Privacidad puede cambiar con el tiempo o ser actualizada
+                por lo que le recomendamos y enfatizamos revisar continuamente esta página para asegurarse que está de acuerdo
+                con dichos cambios.</p>
+            <p>
+                <strong>Información que es recogida</strong>
+            </p>
+            <p align="justify">Nuestro sitio web podrá recoger información personal por ejemplo: Nombre, información de contacto como su dirección
+                de correo electrónica y publicaciones en su muro de facebook.</p>
+            <p>
+                <strong>Uso de la información recogida</strong>
+            </p>
+            <p align="justify">Nuestro sitio web emplea la información con el fin de recabar datos para una investigación de caracter académico,
+                particularmente para mantener un registro de usuarios y analizar el texto de sus publicaciones. Es posible
+                que sean enviados correos electrónicos a través de nuestro sitio con información sobre su participación en
+                el estudio que consideremos relevante para usted o que pueda brindarle algún beneficio, estos correos electrónicos
+                serán enviados a la dirección que usted proporcione y podrán ser cancelados en cualquier momento.</p>
+            <p align="justify">5Grandes está altamente comprometido para cumplir con el compromiso de mantener su información segura. Usamos
+                los sistemas más avanzados y los actualizamos constantemente para asegurarnos que no exista ningún acceso
+                no autorizado.</p>
+            <p>
+                <strong>Cookies</strong>
+            </p>
+            <p align="justify">Nuestro sitio web no emplea las cookies
+                <p>
+                    <strong>Enlaces a Terceros</strong>
+                </p>
+                <p align="justify">Este sitio web pudiera contener enlaces a otros sitios que pudieran ser de su interés. Una vez que usted
+                    de clic en estos enlaces y abandone nuestra página, ya no tenemos control sobre al sitio al que es redirigido
+                    y por lo tanto no somos responsables de los términos o privacidad ni de la protección de sus datos en
+                    esos otros sitios terceros. Dichos sitios están sujetos a sus propias políticas de privacidad por lo
+                    cual es recomendable que los consulte para confirmar que usted está de acuerdo con estas.</p>
+                <p>
+                    <strong>Control de su información personal</strong>
+                </p>
+                <p align="justify">En cualquier momento usted puede restringir la recopilación o el uso de la información personal que es proporcionada
+                    a nuestro sitio web. Cada vez que se le solicite rellenar un formulario, como el de alta de usuario,
+                    puede marcar o desmarcar la opción de recibir información por correo electrónico.</p>
+                <p align="justify">Esta compañía no venderá, cederá ni distribuirá la información personal que es recopilada sin su consentimiento,
+                    salvo que sea requerido por un juez con un orden judicial.</p>
+                <p align="justify">5Grandes Se reserva el derecho de cambiar los términos de la presente Política de Privacidad en cualquier
+                    momento.</p>
+        </div>
+    </div>
+    <!-- /.container -->
+
+    <!-- Footer -->
+    <footer class="py-5 bg-dark">
+        <div class="container">
+            <p class="m-0 text-center text-white">Copyright &copy; 5Grandes 2018</p>
+        </div>
+        <!-- /.container -->
+    </footer>
+
+    <!-- Bootstrap core JavaScript -->
+    <script src="vendor/jquery/jquery.min.js"></script>
+    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+</body>
+
+</html>
