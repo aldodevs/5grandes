@@ -17,7 +17,10 @@ def fb_success():
         graph = facebook.GraphAPI(access_token)
         profile = graph.get_object('me')
         query_string = 'posts?limit={0}'.format(10)
+
+        # Variable con las publcaciones del usuario
         posts = graph.get_connections(profile['id'], query_string)
+
         response = app.response_class(
             response=json.dumps(posts),
             status=200,
